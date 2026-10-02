@@ -1,4 +1,5 @@
-const CONFIG = {
+// Top-level `const` does not create a window property; main.js reads window.CONFIG.
+window.CONFIG = {
   couple: {
     groom: {
       name: "Fakari",

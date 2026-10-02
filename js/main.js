@@ -63,6 +63,26 @@
   applyConfig();
   setLanguage(currentLang);
 
+  // ========== Parse Guest Name (?to=...) ==========
+  const urlParams = new URLSearchParams(window.location.search);
+  const guestNameParam = urlParams.get('to') || urlParams.get('u') || urlParams.get('n') || '';
+  const guestName = guestNameParam.trim();
+
+  const guestNameEl = document.getElementById('cover-guest-name');
+  if (guestNameEl) {
+    if (guestName) {
+      guestNameEl.textContent = guestName;
+      document.title = `The Wedding of Fakari & Aghita - ${guestName}`;
+      
+      const rsvpNameInput = document.getElementById('rsvp-name');
+      if (rsvpNameInput && !rsvpNameInput.value) {
+        rsvpNameInput.value = guestName;
+      }
+    } else {
+      guestNameEl.textContent = 'Tamu Undangan';
+    }
+  }
+
   // ========== Cover Open ==========
   const coverSection = document.getElementById('cover');
   const openBtn = document.getElementById('open-invitation');

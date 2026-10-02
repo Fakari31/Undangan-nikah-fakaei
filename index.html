@@ -54,14 +54,17 @@
       
       <div class="parallax-layer parallax-content">
         <div class="cover-content">
-          <p class="cover-to" data-i18n="cover.to">Kepada Yth.</p>
-          <h1 class="cover-greeting" data-i18n="cover.greeting">The Wedding of</h1>
+          <p class="cover-greeting" data-i18n="cover.greeting">The Wedding of</p>
           <div class="cover-names">
             <span class="name-groom">Fakari</span>
             <span class="name-ampersand">&</span>
             <span class="name-bride">Aghita</span>
           </div>
           <p class="cover-date" data-i18n="cover.date">12 Desember 2026</p>
+          <div class="cover-recipient">
+            <p class="cover-to" data-i18n="cover.to">Kepada Yth. Bapak/Ibu/Saudara/i:</p>
+            <h3 class="cover-guest-name" id="cover-guest-name">Tamu Undangan</h3>
+          </div>
           <button id="open-invitation" class="btn-open" data-i18n="cover.openBtn">
             Buka Undangan
           </button>
@@ -79,10 +82,10 @@
               <img src="assets/img/groom.jpg" alt="Foto Fakari" loading="lazy">
             </div>
             <div class="couple-info">
-              <h3 class="couple-name" data-config="couple.groom.name">Fakari</h3>
-              <p class="couple-fullname" data-i18n="couple.groomTitle" data-config="couple.groom.fullName">Mempelai Pria</p>
+              <h3 class="couple-name" data-config="couple.groom.fullName">Fakari, S.Kom.</h3>
+              <p class="couple-role" data-i18n="couple.groomTitle">Mempelai Pria</p>
               <p class="couple-parents">
-                <span data-i18n="couple.sonOf">Putra dari</span><br>
+                <span data-i18n="couple.sonOf">Putra tercinta dari</span><br>
                 Bpk. H. Ahmad &amp; Ibu Hj. Siti Maryam
               </p>
               <a href="https://instagram.com/fakari" class="couple-social" data-config-link="couple.groom.instagram" target="_blank" rel="noopener" aria-label="Instagram Fakari">
@@ -102,13 +105,13 @@
               <img src="assets/img/bride.jpg" alt="Foto Aghita" loading="lazy">
             </div>
             <div class="couple-info">
-              <h3 class="couple-name">Aghita</h3>
-              <p class="couple-fullname" data-i18n="couple.brideTitle">Mempelai Wanita</p>
+              <h3 class="couple-name" data-config="couple.bride.fullName">Aghita, S.Tr.Kom.</h3>
+              <p class="couple-role" data-i18n="couple.brideTitle">Mempelai Wanita</p>
               <p class="couple-parents">
-                <span data-i18n="couple.daughterOf">Putri dari</span><br>
+                <span data-i18n="couple.daughterOf">Putri tercinta dari</span><br>
                 Bpk. H. Sulaiman &amp; Ibu Hj. Nurhayati
               </p>
-              <a href="https://instagram.com/aghita" class="couple-social" target="_blank" rel="noopener" aria-label="Instagram Aghita">
+              <a href="https://instagram.com/aghita" class="couple-social" data-config-link="couple.bride.instagram" target="_blank" rel="noopener" aria-label="Instagram Aghita">
                 <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
                   <rect x="2" y="2" width="20" height="20" rx="5" fill="none" stroke="currentColor" stroke-width="2"/>
                   <circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/>
