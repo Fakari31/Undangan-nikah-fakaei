@@ -4,6 +4,20 @@
   const CONFIG = window.CONFIG;
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  // ========== Toast System ==========
+  const toastEl = document.getElementById('toast');
+  let toastTimer = null;
+
+  function showToast(message) {
+    if (!toastEl) return;
+    toastEl.textContent = message;
+    toastEl.classList.add('show');
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
+      toastEl.classList.remove('show');
+    }, 2800);
+  }
+
   // ========== I18n ==========
   let currentLang = localStorage.getItem('wedding-lang') || 'id';
 
@@ -24,16 +38,25 @@
       if (text) el.placeholder = text;
     });
 
-    document.querySelector('.lang-current').textContent = lang.toUpperCase();
+    const langCurrent = document.querySelector('.lang-current');
+    if (langCurrent) langCurrent.textContent = lang.toUpperCase();
   }
 
   function getNestedValue(obj, path) {
-    return path.split('.').reduce((o, k) => o?.[k], obj);
+    return path ? path.split('.').reduce((o, k) => o?.[k], obj) : undefined;
+  }
+
+  const langToggleBtn = document.getElementById('lang-toggle');
+  if (langToggleBtn) {
+    langToggleBtn.addEventListener('click', () => {
+      setLanguage(currentLang === 'id' ? 'en' : 'id');
+      showToast(currentLang === 'id' ? 'Bahasa: Indonesia' : 'Language: English');
+    });
   }
 
   // ========== Hydrate from CONFIG ==========
-  // Static HTML text stays as the no-JS fallback; CONFIG is the single source of truth.
   function applyConfig() {
+    if (!CONFIG) return;
     document.querySelectorAll('[data-config]').forEach(el => {
       const value = getNestedValue(CONFIG, el.dataset.config);
       if (typeof value === 'string') el.textContent = value;
@@ -48,17 +71,7 @@
       const value = getNestedValue(CONFIG, el.dataset.configLink);
       if (value) el.href = value;
     });
-
-    document.querySelectorAll('[data-config-attr]').forEach(el => {
-      const [key, attr] = el.dataset.configAttr.split(':');
-      const value = getNestedValue(CONFIG, key);
-      if (value) el.setAttribute(attr, value);
-    });
   }
-
-  document.getElementById('lang-toggle').addEventListener('click', () => {
-    setLanguage(currentLang === 'id' ? 'en' : 'id');
-  });
 
   applyConfig();
   setLanguage(currentLang);
@@ -83,85 +96,100 @@
     }
   }
 
-  // ========== Cover Open ==========
-  const coverSection = document.getElementById('cover');
-  const openBtn = document.getElementById('open-invitation');
+  // ========== Background Music & Vinyl Pill ==========
   const musicAudio = document.getElementById('bg-music');
   const musicToggle = document.getElementById('music-toggle');
 
-  openBtn.addEventListener('click', () => {
-    document.body.classList.add('invitation-opened');
-    coverSection.style.minHeight = '50vh';
-    
-    if (!prefersReducedMotion) {
-      coverSection.style.transition = 'min-height 1s ease';
-    }
-
-    setTimeout(() => {
-      document.getElementById('couple').scrollIntoView({ behavior: 'smooth' });
-    }, 600);
-
+  function toggleMusic() {
+    if (!musicAudio) return;
     if (musicAudio.paused) {
-      musicAudio.play().catch(() => {});
-      musicToggle.classList.add('playing');
-      musicToggle.setAttribute('aria-pressed', 'true');
-    }
-  });
-
-  // ========== Layered Parallax ==========
-  if (!prefersReducedMotion) {
-    const parallaxBg = document.querySelector('.parallax-bg');
-    const parallaxContent = document.querySelector('.parallax-content');
-    let ticking = false;
-
-    function updateParallax() {
-      const scrolled = window.scrollY;
-      const coverHeight = coverSection.offsetHeight;
-      
-      if (scrolled < coverHeight) {
-        const progress = scrolled / coverHeight;
-        parallaxBg.style.transform = `translate3d(0, ${scrolled * 0.3}px, 0)`;
-        parallaxContent.style.transform = `translate3d(0, ${scrolled * 0.15}px, 0)`;
-        parallaxContent.style.opacity = 1 - (progress * 0.8);
+      musicAudio.play().then(() => {
+        if (musicToggle) {
+          musicToggle.classList.add('playing');
+          musicToggle.setAttribute('aria-pressed', 'true');
+        }
+        showToast('🎵 Musik diputar');
+      }).catch(() => {
+        showToast('Klik layar untuk memutar musik');
+      });
+    } else {
+      musicAudio.pause();
+      if (musicToggle) {
+        musicToggle.classList.remove('playing');
+        musicToggle.setAttribute('aria-pressed', 'false');
       }
-      ticking = false;
+      showToast('🔇 Musik dijeda');
     }
-
-    window.addEventListener('scroll', () => {
-      if (!ticking) {
-        requestAnimationFrame(updateParallax);
-        ticking = true;
-      }
-    }, { passive: true });
   }
 
-  // ========== Scroll Reveal ==========
-  const revealObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('active');
-        revealObserver.unobserve(entry.target);
+  if (musicToggle) {
+    musicToggle.addEventListener('click', toggleMusic);
+  }
+
+  // ========== Cover Open ==========
+  const openBtn = document.getElementById('open-invitation');
+  if (openBtn) {
+    openBtn.addEventListener('click', () => {
+      document.body.classList.add('invitation-opened');
+      
+      const coupleSection = document.getElementById('couple');
+      if (coupleSection) {
+        coupleSection.scrollIntoView({ behavior: 'smooth' });
+      }
+
+      if (musicAudio && musicAudio.paused) {
+        musicAudio.play().then(() => {
+          if (musicToggle) {
+            musicToggle.classList.add('playing');
+            musicToggle.setAttribute('aria-pressed', 'true');
+          }
+        }).catch(() => {});
       }
     });
-  }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+  }
 
-  document.querySelectorAll('.section > .container').forEach(el => {
-    el.classList.add('reveal');
-    revealObserver.observe(el);
-  });
+  // ========== Bottom Dock Active Scroll Spy ==========
+  const sections = document.querySelectorAll('section[id]');
+  const dockItems = document.querySelectorAll('.dock-item');
 
-  // ========== Countdown ==========
-  const targetDate = new Date(`${CONFIG.events.akad.date}T${CONFIG.events.akad.timeStart}:00`).getTime();
+  const scrollSpyObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.getAttribute('id');
+        dockItems.forEach(item => {
+          if (item.dataset.target === id) {
+            item.classList.add('active');
+          } else {
+            item.classList.remove('active');
+          }
+        });
+      }
+    });
+  }, { threshold: 0.35 });
+
+  sections.forEach(s => scrollSpyObserver.observe(s));
+
+  // ========== Countdown Timer ==========
+  const akadDate = (CONFIG && CONFIG.events && CONFIG.events.akad) ? CONFIG.events.akad.date : '2026-12-12';
+  const akadTime = (CONFIG && CONFIG.events && CONFIG.events.akad) ? CONFIG.events.akad.timeStart : '08:00';
+  const targetDate = new Date(`${akadDate}T${akadTime}:00`).getTime();
 
   function updateCountdown() {
     const now = new Date().getTime();
     const distance = targetDate - now;
 
+    const daysEl = document.getElementById('countdown-days');
+    const hoursEl = document.getElementById('countdown-hours');
+    const minutesEl = document.getElementById('countdown-minutes');
+    const secondsEl = document.getElementById('countdown-seconds');
+
+    if (!daysEl) return;
+
     if (distance < 0) {
-      document.getElementById('countdown-days').textContent = '00';
-      document.getElementById('countdown-hours').textContent = '00';
-      document.getElementById('countdown-minutes').textContent = '00';
-      document.getElementById('countdown-seconds').textContent = '00';
+      daysEl.textContent = '00';
+      hoursEl.textContent = '00';
+      minutesEl.textContent = '00';
+      secondsEl.textContent = '00';
       return;
     }
 
@@ -170,16 +198,16 @@
     const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
     const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-    document.getElementById('countdown-days').textContent = String(days).padStart(2, '0');
-    document.getElementById('countdown-hours').textContent = String(hours).padStart(2, '0');
-    document.getElementById('countdown-minutes').textContent = String(minutes).padStart(2, '0');
-    document.getElementById('countdown-seconds').textContent = String(seconds).padStart(2, '0');
+    daysEl.textContent = String(days).padStart(2, '0');
+    hoursEl.textContent = String(hours).padStart(2, '0');
+    minutesEl.textContent = String(minutes).padStart(2, '0');
+    secondsEl.textContent = String(seconds).padStart(2, '0');
   }
 
   updateCountdown();
   setInterval(updateCountdown, 1000);
 
-  // ========== Add to Calendar ==========
+  // ========== Add to Calendar (.ics) ==========
   function generateICS(event) {
     const eventData = CONFIG.events[event];
     const startDate = new Date(`${eventData.date}T${eventData.timeStart}:00`);
@@ -201,7 +229,8 @@ END:VCALENDAR`;
 
   document.querySelectorAll('.add-calendar').forEach(btn => {
     btn.addEventListener('click', (e) => {
-      const event = e.target.dataset.event;
+      const event = btn.dataset.event;
+      if (!event || !CONFIG.events[event]) return;
       const icsContent = generateICS(event);
       const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
       const url = URL.createObjectURL(blob);
@@ -212,6 +241,7 @@ END:VCALENDAR`;
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
+      showToast('📅 Jadwal kalender diunduh!');
     });
   });
 
@@ -222,105 +252,136 @@ END:VCALENDAR`;
   document.querySelectorAll('.gallery-item').forEach(item => {
     item.addEventListener('click', () => {
       const img = item.querySelector('img');
-      lightboxImg.src = img.src;
-      lightboxImg.alt = img.alt;
-      lightbox.hidden = false;
-      document.body.style.overflow = 'hidden';
+      if (img && lightbox && lightboxImg) {
+        lightboxImg.src = img.src;
+        lightboxImg.alt = img.alt;
+        lightbox.hidden = false;
+        document.body.style.overflow = 'hidden';
+      }
     });
   });
 
   function closeLightbox() {
-    lightbox.hidden = true;
-    document.body.style.overflow = '';
-  }
-
-  lightbox.querySelector('.lightbox-close').addEventListener('click', closeLightbox);
-  lightbox.addEventListener('click', (e) => {
-    if (e.target === lightbox) closeLightbox();
-  });
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && !lightbox.hidden) closeLightbox();
-  });
-
-  // ========== RSVP Form ==========
-  const rsvpForm = document.getElementById('rsvp-form');
-
-  rsvpForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    const formData = new FormData(rsvpForm);
-    const data = {
-      name: formData.get('name'),
-      attendance: formData.get('attendance'),
-      guests: formData.get('guests') || '0',
-      message: formData.get('message'),
-      timestamp: new Date().toISOString()
-    };
-
-    const submitBtn = rsvpForm.querySelector('.btn-submit');
-    const originalText = submitBtn.textContent;
-    submitBtn.disabled = true;
-    submitBtn.textContent = '...';
-
-    try {
-      const response = await fetch(CONFIG.googleAppsScript.rsvpUrl, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      });
-
-      showFormStatus('success', getNestedValue(CONFIG.text[currentLang], 'rsvp.success'));
-      rsvpForm.reset();
-      loadGuestbook();
-    } catch (error) {
-      showFormStatus('error', getNestedValue(CONFIG.text[currentLang], 'rsvp.error'));
-    } finally {
-      submitBtn.disabled = false;
-      submitBtn.textContent = originalText;
+    if (lightbox) {
+      lightbox.hidden = true;
+      document.body.style.overflow = '';
     }
-  });
-
-  function showFormStatus(type, message) {
-    const existing = rsvpForm.querySelector('.form-status');
-    if (existing) existing.remove();
-    
-    const status = document.createElement('div');
-    status.className = `form-status ${type}`;
-    status.textContent = message;
-    rsvpForm.appendChild(status);
-    
-    setTimeout(() => status.remove(), 5000);
   }
 
-  // ========== Guestbook ==========
-  async function loadGuestbook() {
-    const list = document.getElementById('guestbook-list');
-    list.innerHTML = `<p class="guestbook-loading">${getNestedValue(CONFIG.text[currentLang], 'guestbook.loading')}</p>`;
+  if (lightbox) {
+    const closeBtn = lightbox.querySelector('.lightbox-close');
+    if (closeBtn) closeBtn.addEventListener('click', closeLightbox);
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) closeLightbox();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !lightbox.hidden) closeLightbox();
+    });
+  }
 
+  // ========== Digital Gift Copy ==========
+  document.querySelectorAll('.copy-btn-action').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const acc = btn.dataset.copy;
+      if (!acc) return;
+      try {
+        await navigator.clipboard.writeText(acc);
+        showToast(`✅ No. Rekening ${acc} berhasil disalin!`);
+      } catch (e) {
+        const t = document.createElement('textarea');
+        t.value = acc;
+        document.body.appendChild(t);
+        t.select();
+        document.execCommand('copy');
+        document.body.removeChild(t);
+        showToast(`✅ No. Rekening ${acc} berhasil disalin!`);
+      }
+    });
+  });
+
+  // ========== RSVP & Wishes Live Feed ==========
+  const rsvpForm = document.getElementById('rsvp-form');
+  const defaultWishes = [
+    { name: "Rian & Nabila", attendance: "attend", message: "Selamat menempuh hidup baru Fakari & Aghita! Semoga menjadi keluarga yang sakinah, mawaddah, warahmah. Aamiin!", time: "2 jam yang lalu" },
+    { name: "Dimas Pratama", attendance: "attend", message: "Barakallah Fakari! Lancar sampai hari H bro! Can't wait to be there! 🎉", time: "5 jam yang lalu" },
+    { name: "Sarah & Keluarga", attendance: "attend", message: "Happy wedding Aghita & Fakari! Bahagia selalu sampai kakek nenek ✨", time: "1 hari yang lalu" }
+  ];
+
+  function renderGuestbook(messages) {
+    const list = document.getElementById('guestbook-list');
+    if (!list) return;
+
+    const data = (messages && messages.length > 0) ? messages : defaultWishes;
+
+    list.innerHTML = data.map(msg => {
+      const safeName = escapeHtml(msg.name || 'Tamu');
+      const safeMsg = escapeHtml(msg.message || '');
+      const isAttend = msg.attendance === 'attend';
+      const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(safeName)}&background=967646&color=fff&size=68&bold=true`;
+
+      return `
+        <div class="guestbook-item">
+          <div class="guestbook-user-row">
+            <img src="${avatarUrl}" class="guestbook-avatar" alt="${safeName}" loading="lazy">
+            <span class="guestbook-name-title">${safeName}</span>
+            <span class="guestbook-badge-status ${isAttend ? '' : 'not-attend'}">
+              ${isAttend ? '🎉 Hadir' : '🙏 Berhalangan'}
+            </span>
+          </div>
+          <p class="guestbook-text">${safeMsg}</p>
+        </div>
+      `;
+    }).join('');
+  }
+
+  async function loadGuestbook() {
     try {
-      const response = await fetch(CONFIG.googleAppsScript.guestbookUrl);
-      const messages = await response.json();
-      
-      if (!messages || messages.length === 0) {
-        list.innerHTML = `<p class="guestbook-empty">${getNestedValue(CONFIG.text[currentLang], 'guestbook.empty')}</p>`;
+      const scriptUrl = CONFIG?.googleAppsScript?.guestbookUrl;
+      if (scriptUrl && !scriptUrl.includes('YOUR_SCRIPT_ID')) {
+        const response = await fetch(scriptUrl);
+        const messages = await response.json();
+        renderGuestbook(messages);
+      } else {
+        renderGuestbook(defaultWishes);
+      }
+    } catch (e) {
+      renderGuestbook(defaultWishes);
+    }
+  }
+
+  if (rsvpForm) {
+    rsvpForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(rsvpForm);
+      const name = formData.get('name');
+      const attendance = formData.get('attendance');
+      const message = formData.get('message');
+
+      if (!name || !message) {
+        showToast('⚠️ Mohon isi nama dan pesan doa');
         return;
       }
 
-      list.innerHTML = messages.map(msg => `
-        <div class="guestbook-item">
-          <div class="guestbook-header">
-            <span class="guestbook-name">${escapeHtml(msg.name)}</span>
-            <span class="guestbook-badge ${msg.attendance === 'not-attend' ? 'not-attend' : ''}">
-              ${msg.attendance === 'attend' ? 'Hadir' : 'Tidak Hadir'}
-            </span>
-          </div>
-          <p class="guestbook-message">${escapeHtml(msg.message)}</p>
-        </div>
-      `).join('');
-    } catch (error) {
-      list.innerHTML = `<p class="guestbook-empty">${getNestedValue(CONFIG.text[currentLang], 'guestbook.empty')}</p>`;
-    }
+      const newEntry = { name, attendance, message, time: 'Baru saja' };
+      defaultWishes.unshift(newEntry);
+      renderGuestbook(defaultWishes);
+
+      showToast('💌 Terima kasih atas doa restunya!');
+      rsvpForm.reset();
+
+      // Submit to Google Apps Script if URL provided
+      const rsvpUrl = CONFIG?.googleAppsScript?.rsvpUrl;
+      if (rsvpUrl && !rsvpUrl.includes('YOUR_SCRIPT_ID')) {
+        try {
+          fetch(rsvpUrl, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, attendance, message, timestamp: new Date().toISOString() })
+          });
+        } catch (err) {}
+      }
+    });
   }
 
   function escapeHtml(text) {
@@ -330,59 +391,5 @@ END:VCALENDAR`;
   }
 
   loadGuestbook();
-
-  // ========== Digital Envelope ==========
-  document.getElementById('copy-bank').addEventListener('click', async () => {
-    const accountNumber = CONFIG.bank.accountNumber;
-    
-    try {
-      await navigator.clipboard.writeText(accountNumber);
-      const btn = document.getElementById('copy-bank');
-      const originalText = btn.textContent;
-      btn.textContent = getNestedValue(CONFIG.text[currentLang], 'envelope.copied');
-      
-      setTimeout(() => {
-        btn.textContent = originalText;
-      }, 2000);
-    } catch (err) {
-      const textarea = document.createElement('textarea');
-      textarea.value = accountNumber;
-      document.body.appendChild(textarea);
-      textarea.select();
-      document.execCommand('copy');
-      document.body.removeChild(textarea);
-    }
-  });
-
-  // ========== Background Music ==========
-  musicToggle.addEventListener('click', () => {
-    if (musicAudio.paused) {
-      musicAudio.play().catch(() => {});
-      musicToggle.classList.add('playing');
-      musicToggle.setAttribute('aria-pressed', 'true');
-    } else {
-      musicAudio.pause();
-      musicToggle.classList.remove('playing');
-      musicToggle.setAttribute('aria-pressed', 'false');
-    }
-  });
-
-  // Try autoplay muted
-  if (CONFIG.music.autoplay && !prefersReducedMotion) {
-    musicAudio.play().catch(() => {
-      // Autoplay blocked, wait for user interaction
-    });
-  }
-
-  // ========== Smooth Scroll for Anchor Links ==========
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', (e) => {
-      e.preventDefault();
-      const target = document.querySelector(anchor.getAttribute('href'));
-      if (target) {
-        target.scrollIntoView({ behavior: 'smooth' });
-      }
-    });
-  });
 
 })();

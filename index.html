@@ -2,23 +2,70 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Undangan Pernikahan Fakari &amp; Aghita - 12 Desember 2026">
-  <title>Fakari &amp; Aghita Wedding</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="description" content="The Wedding of Fakari &amp; Aghita - 12 Desember 2026">
+  <title>The Wedding of Fakari &amp; Aghita</title>
+  
+  <!-- Modern Google Fonts: Italiana, Playfair Display, Plus Jakarta Sans, Alex Brush -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Italiana&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <div class="petals-container" aria-hidden="true">
-    <div class="petal"></div>
-    <div class="petal"></div>
-    <div class="petal"></div>
-    <div class="petal"></div>
-    <div class="petal"></div>
-  </div>
 
+  <!-- Floating Toast Notification -->
+  <div id="toast" class="toast" role="alert" aria-live="assertive"></div>
+
+  <!-- Ambient Glow Elements -->
+  <div class="ambient-glow glow-1" aria-hidden="true"></div>
+  <div class="ambient-glow glow-2" aria-hidden="true"></div>
+
+  <!-- Floating Music Pill -->
+  <aside class="music-pill-widget" id="music-widget" aria-label="Music player">
+    <button id="music-toggle" class="music-pill-btn" aria-label="Toggle Music" aria-pressed="false">
+      <span class="vinyl-disc" aria-hidden="true">
+        <span class="vinyl-inner"></span>
+      </span>
+      <span class="music-bars" aria-hidden="true">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </span>
+    </button>
+  </aside>
+
+  <!-- Floating Bottom App Dock Navigation -->
+  <nav class="bottom-dock" id="bottom-dock" aria-label="Quick navigation">
+    <a href="#cover" class="dock-item active" data-target="cover" aria-label="Cover">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+      <span>Home</span>
+    </a>
+    <a href="#couple" class="dock-item" data-target="couple" aria-label="Mempelai">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      <span>Couple</span>
+    </a>
+    <a href="#events" class="dock-item" data-target="events" aria-label="Acara">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      <span>Event</span>
+    </a>
+    <a href="#gallery" class="dock-item" data-target="gallery" aria-label="Galeri">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      <span>Galeri</span>
+    </a>
+    <a href="#envelope" class="dock-item" data-target="envelope" aria-label="Amplop Digital">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/></svg>
+      <span>Gift</span>
+    </a>
+    <a href="#rsvp" class="dock-item" data-target="rsvp" aria-label="RSVP">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+      <span>RSVP</span>
+    </a>
+  </nav>
+
+  <!-- Language Nav Switcher -->
   <nav class="lang-nav" aria-label="Language switcher">
     <button id="lang-toggle" class="lang-btn" aria-label="Switch language">
       <span class="lang-current">ID</span>
@@ -26,326 +73,443 @@
   </nav>
 
   <main id="main-content">
+    
+    <!-- ================= COVER SECTION ================= -->
     <section id="cover" class="cover-section" aria-label="Cover">
-      <div class="parallax-layer parallax-bg" aria-hidden="true">
-        <svg class="ornament ornament-top-left" viewBox="0 0 200 200" aria-hidden="true">
-          <path d="M0,0 Q50,50 100,0 T200,0" fill="none" stroke="#6B7F5E" stroke-width="2"/>
-          <circle cx="20" cy="20" r="8" fill="#B8A88A"/>
-          <circle cx="60" cy="10" r="5" fill="#C9A86C"/>
-          <circle cx="100" cy="15" r="6" fill="#6B7F5E"/>
-        </svg>
-        <svg class="ornament ornament-top-right" viewBox="0 0 200 200" aria-hidden="true">
-          <path d="M200,0 Q150,50 100,0 T0,0" fill="none" stroke="#6B7F5E" stroke-width="2"/>
-          <circle cx="180" cy="20" r="8" fill="#B8A88A"/>
-          <circle cx="140" cy="10" r="5" fill="#C9A86C"/>
-          <circle cx="100" cy="15" r="6" fill="#6B7F5E"/>
-        </svg>
-        <svg class="ornament ornament-bottom-left" viewBox="0 0 200 200" aria-hidden="true">
-          <path d="M0,200 Q50,150 100,200 T200,200" fill="none" stroke="#6B7F5E" stroke-width="2"/>
-          <circle cx="20" cy="180" r="8" fill="#B8A88A"/>
-          <circle cx="60" cy="190" r="5" fill="#C9A86C"/>
-        </svg>
-        <svg class="ornament ornament-bottom-right" viewBox="0 0 200 200" aria-hidden="true">
-          <path d="M200,200 Q150,150 100,200 T0,200" fill="none" stroke="#6B7F5E" stroke-width="2"/>
-          <circle cx="180" cy="180" r="8" fill="#B8A88A"/>
-          <circle cx="140" cy="190" r="5" fill="#C9A86C"/>
-        </svg>
-      </div>
+      <div class="cover-backdrop"></div>
       
-      <div class="parallax-layer parallax-content">
-        <div class="cover-content">
-          <p class="cover-greeting" data-i18n="cover.greeting">The Wedding of</p>
-          <div class="cover-names">
+      <div class="container cover-container">
+        <div class="cover-card glass-panel">
+          
+          <div class="cover-badge">
+            <span class="sparkle-icon">✨</span>
+            <span data-i18n="cover.greeting">The Wedding of</span>
+          </div>
+
+          <h1 class="cover-names">
             <span class="name-groom">Fakari</span>
-            <span class="name-ampersand">&</span>
+            <span class="name-amp">&amp;</span>
             <span class="name-bride">Aghita</span>
+          </h1>
+
+          <div class="cover-date-pill">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <span class="cover-date-text" data-i18n="cover.date">12 Desember 2026</span>
           </div>
-          <p class="cover-date" data-i18n="cover.date">12 Desember 2026</p>
+
+          <!-- Recipient Box (Personalized ?to=) -->
           <div class="cover-recipient">
-            <p class="cover-to" data-i18n="cover.to">Kepada Yth. Bapak/Ibu/Saudara/i:</p>
-            <h3 class="cover-guest-name" id="cover-guest-name">Tamu Undangan</h3>
+            <p class="recipient-label" data-i18n="cover.to">Kepada Yth. Bapak/Ibu/Saudara/i:</p>
+            <h2 class="recipient-name" id="cover-guest-name">Tamu Undangan</h2>
+            <span class="recipient-tag">Special Invitation</span>
           </div>
-          <button id="open-invitation" class="btn-open" data-i18n="cover.openBtn">
-            Buka Undangan
+
+          <button id="open-invitation" class="btn-open-modern" data-i18n="cover.openBtn">
+            <span>Buka Undangan</span>
+            <svg class="arrow-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
           </button>
+
         </div>
       </div>
     </section>
 
+    <!-- ================= COUPLE SECTION ================= -->
     <section id="couple" class="section couple-section" aria-labelledby="couple-heading">
       <div class="container">
-        <h2 id="couple-heading" class="section-title" data-i18n="couple.title">Mempelai</h2>
         
-        <div class="couple-grid">
-          <article class="couple-card">
-            <div class="couple-photo">
+        <div class="section-header text-center">
+          <span class="section-subtitle">Groom &amp; Bride</span>
+          <h2 id="couple-heading" class="section-title" data-i18n="couple.title">Mempelai</h2>
+          <div class="section-divider"></div>
+        </div>
+
+        <!-- Holy Quote Card -->
+        <div class="quote-card glass-panel text-center">
+          <p class="arabic-text">وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً</p>
+          <p class="quote-translation" data-i18n="footer.quote">
+            "Dan di antara tanda-tanda kebesaran-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang."
+          </p>
+          <cite class="quote-source" data-i18n="footer.source">QS. Ar-Rum: 21</cite>
+        </div>
+
+        <!-- Couple Bento Grid -->
+        <div class="couple-bento-grid">
+          
+          <!-- Groom Card -->
+          <article class="couple-card glass-panel">
+            <div class="couple-frame">
               <img src="assets/img/groom.jpg" alt="Foto Fakari" loading="lazy">
+              <div class="polaroid-pin">👨🏻‍💼</div>
             </div>
             <div class="couple-info">
+              <span class="couple-role-badge" data-i18n="couple.groomTitle">Mempelai Pria</span>
               <h3 class="couple-name" data-config="couple.groom.fullName">Fakari, S.Kom.</h3>
-              <p class="couple-role" data-i18n="couple.groomTitle">Mempelai Pria</p>
               <p class="couple-parents">
-                <span data-i18n="couple.sonOf">Putra tercinta dari</span><br>
-                Bpk. H. Ahmad &amp; Ibu Hj. Siti Maryam
+                <span data-i18n="couple.sonOf">Putra tercinta dari:</span><br>
+                <strong>Bpk. H. Ahmad &amp; Ibu Hj. Siti Maryam</strong>
               </p>
-              <a href="https://instagram.com/fakari" class="couple-social" data-config-link="couple.groom.instagram" target="_blank" rel="noopener" aria-label="Instagram Fakari">
-                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
-                  <rect x="2" y="2" width="20" height="20" rx="5" fill="none" stroke="currentColor" stroke-width="2"/>
-                  <circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/>
-                  <circle cx="18" cy="6" r="1.5" fill="currentColor"/>
-                </svg>
+              <a href="https://instagram.com/fakari" class="btn-social-pill" data-config-link="couple.groom.instagram" target="_blank" rel="noopener" aria-label="Instagram Fakari">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+                <span>@fakari</span>
               </a>
             </div>
           </article>
 
-          <div class="couple-ampersand" aria-hidden="true">&</div>
+          <!-- Romantic Divider -->
+          <div class="couple-center-badge" aria-hidden="true">
+            <span class="heart-pulse">💍</span>
+          </div>
 
-          <article class="couple-card">
-            <div class="couple-photo">
+          <!-- Bride Card -->
+          <article class="couple-card glass-panel">
+            <div class="couple-frame">
               <img src="assets/img/bride.jpg" alt="Foto Aghita" loading="lazy">
+              <div class="polaroid-pin">👰🏻‍♀️</div>
             </div>
             <div class="couple-info">
+              <span class="couple-role-badge" data-i18n="couple.brideTitle">Mempelai Wanita</span>
               <h3 class="couple-name" data-config="couple.bride.fullName">Aghita, S.Tr.Kom.</h3>
-              <p class="couple-role" data-i18n="couple.brideTitle">Mempelai Wanita</p>
               <p class="couple-parents">
-                <span data-i18n="couple.daughterOf">Putri tercinta dari</span><br>
-                Bpk. H. Sulaiman &amp; Ibu Hj. Nurhayati
+                <span data-i18n="couple.daughterOf">Putri tercinta dari:</span><br>
+                <strong>Bpk. H. Sulaiman &amp; Ibu Hj. Nurhayati</strong>
               </p>
-              <a href="https://instagram.com/aghita" class="couple-social" data-config-link="couple.bride.instagram" target="_blank" rel="noopener" aria-label="Instagram Aghita">
-                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
-                  <rect x="2" y="2" width="20" height="20" rx="5" fill="none" stroke="currentColor" stroke-width="2"/>
-                  <circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/>
-                  <circle cx="18" cy="6" r="1.5" fill="currentColor"/>
-                </svg>
+              <a href="https://instagram.com/aghita" class="btn-social-pill" data-config-link="couple.bride.instagram" target="_blank" rel="noopener" aria-label="Instagram Aghita">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+                <span>@aghita</span>
               </a>
             </div>
           </article>
+
         </div>
       </div>
     </section>
 
+    <!-- ================= EVENTS & COUNTDOWN SECTION ================= -->
     <section id="events" class="section events-section" aria-labelledby="events-heading">
       <div class="container">
-        <h2 id="events-heading" class="section-title" data-i18n="events.title">Waktu & Tempat</h2>
         
-        <div class="events-grid">
-          <article class="event-card">
-            <div class="event-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" width="32" height="32">
-                <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/>
-                <path d="M12 6v6l4 2" fill="none" stroke="currentColor" stroke-width="2"/>
-              </svg>
+        <div class="section-header text-center">
+          <span class="section-subtitle">Save The Date</span>
+          <h2 id="events-heading" class="section-title" data-i18n="events.title">Waktu &amp; Tempat</h2>
+          <div class="section-divider"></div>
+        </div>
+
+        <!-- Modern Countdown Timer -->
+        <div class="countdown-widget glass-panel">
+          <p class="countdown-label-top" data-i18n="countdown.title">Menghitung Hari</p>
+          <div class="countdown-grid" role="timer" aria-live="polite">
+            <div class="countdown-box">
+              <span class="countdown-val" id="countdown-days">00</span>
+              <span class="countdown-unit" data-i18n="countdown.days">Hari</span>
             </div>
-            <h3 class="event-title" data-i18n="events.akad">Akad Nikah</h3>
-            <time class="event-date" datetime="2026-12-12">12 Desember 2026</time>
-            <time class="event-time">08:00 - 10:00 WIB</time>
-            <p class="event-venue">Masjid Raya Al-Muhajirin</p>
-            <p class="event-address">Jl. Diponegoro No. 45, Jakarta Selatan</p>
-            <div class="event-actions">
-              <a href="#" class="btn btn-secondary" data-i18n="events.mapsBtn">Lihat Lokasi</a>
-              <button class="btn btn-primary add-calendar" data-event="akad" data-i18n="events.calendarBtn">Tambah ke Kalender</button>
+            <span class="countdown-sep">:</span>
+            <div class="countdown-box">
+              <span class="countdown-val" id="countdown-hours">00</span>
+              <span class="countdown-unit" data-i18n="countdown.hours">Jam</span>
             </div>
-            <div class="event-map">
+            <span class="countdown-sep">:</span>
+            <div class="countdown-box">
+              <span class="countdown-val" id="countdown-minutes">00</span>
+              <span class="countdown-unit" data-i18n="countdown.minutes">Menit</span>
+            </div>
+            <span class="countdown-sep">:</span>
+            <div class="countdown-box">
+              <span class="countdown-val" id="countdown-seconds">00</span>
+              <span class="countdown-unit" data-i18n="countdown.seconds">Detik</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Events Grid -->
+        <div class="events-bento-grid">
+          
+          <!-- Akad Card -->
+          <article class="event-modern-card glass-panel">
+            <div class="event-tag-pill">Akad Nikah</div>
+            <h3 class="event-name" data-i18n="events.akad">Akad Nikah</h3>
+            
+            <div class="event-meta-item">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              <span>Sabtu, 12 Desember 2026</span>
+            </div>
+            <div class="event-meta-item">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <span>08:00 - 10:00 WIB</span>
+            </div>
+            <div class="event-meta-item">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              <div>
+                <strong>Masjid Raya Al-Muhajirin</strong>
+                <p class="event-address-sub">Jl. Diponegoro No. 45, Jakarta Selatan</p>
+              </div>
+            </div>
+
+            <div class="event-btn-row">
+              <button class="btn-event btn-cal add-calendar" data-event="akad" data-i18n="events.calendarBtn">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                <span>Simpan Kalender</span>
+              </button>
+              <a href="https://maps.google.com/?q=-6.194741,106.8195613" target="_blank" rel="noopener" class="btn-event btn-maps" data-i18n="events.mapsBtn">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+                <span>Petunjuk Arah</span>
+              </a>
+            </div>
+
+            <div class="event-map-container">
               <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.521260322283!2d106.8195613!3d-6.194741!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNsKwMTEnNDEuMSJTIDEwNsKwNDknMTAuNCJF!5e0!3m2!1sen!2sid!4v1234567890"
-                width="100%" 
-                height="200" 
-                style="border:0;" 
-                allowfullscreen="" 
-                loading="lazy" 
-                referrerpolicy="no-referrer-when-downgrade"
-                title="Lokasi Akad Nikah">
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.521260322283!2d106.8195613!3d-6.194741!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNsKwMTEnNDEuMSJTIDEwNsKwNDknMTAuNCJF!5e0!3m2!1sid!2sid!4v1600000000000"
+                width="100%" height="160" style="border:0;" allowfullscreen="" loading="lazy" title="Peta Lokasi Akad">
               </iframe>
             </div>
           </article>
 
-          <article class="event-card">
-            <div class="event-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" width="32" height="32">
-                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" fill="none" stroke="currentColor" stroke-width="2"/>
-              </svg>
+          <!-- Resepsi Card -->
+          <article class="event-modern-card glass-panel">
+            <div class="event-tag-pill highlight">Resepsi</div>
+            <h3 class="event-name" data-i18n="events.resepsi">Resepsi Pernikahan</h3>
+            
+            <div class="event-meta-item">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              <span>Sabtu, 12 Desember 2026</span>
             </div>
-            <h3 class="event-title" data-i18n="events.resepsi">Resepsi</h3>
-            <time class="event-date" datetime="2026-12-12">12 Desember 2026</time>
-            <time class="event-time">11:00 - 15:00 WIB</time>
-            <p class="event-venue">Grand Ballroom Hotel Horison</p>
-            <p class="event-address">Jl. Gatot Subroto No. 136, Jakarta Selatan</p>
-            <div class="event-actions">
-              <a href="#" class="btn btn-secondary" data-i18n="events.mapsBtn">Lihat Lokasi</a>
-              <button class="btn btn-primary add-calendar" data-event="resepsi" data-i18n="events.calendarBtn">Tambah ke Kalender</button>
+            <div class="event-meta-item">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <span>11:00 - 15:00 WIB</span>
             </div>
-            <div class="event-map">
+            <div class="event-meta-item">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              <div>
+                <strong>Grand Ballroom Hotel Horison</strong>
+                <p class="event-address-sub">Jl. Gatot Subroto No. 136, Jakarta Selatan</p>
+              </div>
+            </div>
+
+            <div class="event-btn-row">
+              <button class="btn-event btn-cal add-calendar" data-event="resepsi" data-i18n="events.calendarBtn">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                <span>Simpan Kalender</span>
+              </button>
+              <a href="https://maps.google.com/?q=-6.194741,106.8195613" target="_blank" rel="noopener" class="btn-event btn-maps" data-i18n="events.mapsBtn">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+                <span>Petunjuk Arah</span>
+              </a>
+            </div>
+
+            <div class="event-map-container">
               <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.521260322283!2d106.8195613!3d-6.194741!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNsKwMTEnNDEuMSJTIDEwNsKwNDknMTAuNCJF!5e0!3m2!1sen!2sid!4v1234567890"
-                width="100%" 
-                height="200" 
-                style="border:0;" 
-                allowfullscreen="" 
-                loading="lazy" 
-                referrerpolicy="no-referrer-when-downgrade"
-                title="Lokasi Resepsi">
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.521260322283!2d106.8195613!3d-6.194741!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNsKwMTEnNDEuMSJTIDEwNsKwNDknMTAuNCJF!5e0!3m2!1sid!2sid!4v1600000000000"
+                width="100%" height="160" style="border:0;" allowfullscreen="" loading="lazy" title="Peta Lokasi Resepsi">
               </iframe>
             </div>
           </article>
+
         </div>
       </div>
     </section>
 
-    <section id="countdown" class="section countdown-section" aria-labelledby="countdown-heading">
-      <div class="container">
-        <h2 id="countdown-heading" class="section-title" data-i18n="countdown.title">Menghitung Hari</h2>
-        <div class="countdown" role="timer" aria-live="polite">
-          <div class="countdown-item">
-            <span class="countdown-number" id="countdown-days">00</span>
-            <span class="countdown-label" data-i18n="countdown.days">Hari</span>
-          </div>
-          <div class="countdown-item">
-            <span class="countdown-number" id="countdown-hours">00</span>
-            <span class="countdown-label" data-i18n="countdown.hours">Jam</span>
-          </div>
-          <div class="countdown-item">
-            <span class="countdown-number" id="countdown-minutes">00</span>
-            <span class="countdown-label" data-i18n="countdown.minutes">Menit</span>
-          </div>
-          <div class="countdown-item">
-            <span class="countdown-number" id="countdown-seconds">00</span>
-            <span class="countdown-label" data-i18n="countdown.seconds">Detik</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
+    <!-- ================= GALLERY SECTION ================= -->
     <section id="gallery" class="section gallery-section" aria-labelledby="gallery-heading">
       <div class="container">
-        <h2 id="gallery-heading" class="section-title" data-i18n="gallery.title">Galeri Foto</h2>
-        <div class="gallery-grid">
-          <figure class="gallery-item">
-            <img src="assets/img/gallery/photo1.jpg" alt="Foto prewedding 1" loading="lazy">
-          </figure>
-          <figure class="gallery-item">
-            <img src="assets/img/gallery/photo2.jpg" alt="Foto prewedding 2" loading="lazy">
-          </figure>
-          <figure class="gallery-item">
-            <img src="assets/img/gallery/photo3.jpg" alt="Foto prewedding 3" loading="lazy">
-          </figure>
-          <figure class="gallery-item">
-            <img src="assets/img/gallery/photo4.jpg" alt="Foto prewedding 4" loading="lazy">
-          </figure>
-          <figure class="gallery-item">
-            <img src="assets/img/gallery/photo5.jpg" alt="Foto prewedding 5" loading="lazy">
-          </figure>
-          <figure class="gallery-item">
-            <img src="assets/img/gallery/photo6.jpg" alt="Foto prewedding 6" loading="lazy">
-          </figure>
+        
+        <div class="section-header text-center">
+          <span class="section-subtitle">Visual Romance</span>
+          <h2 id="gallery-heading" class="section-title" data-i18n="gallery.title">Momen Bahagia</h2>
+          <div class="section-divider"></div>
         </div>
-      </div>
-    </section>
 
-    <section id="rsvp" class="section rsvp-section" aria-labelledby="rsvp-heading">
-      <div class="container">
-        <h2 id="rsvp-heading" class="section-title" data-i18n="rsvp.title">Konfirmasi Kehadiran</h2>
-        <form id="rsvp-form" class="rsvp-form" novalidate>
-          <div class="form-group">
-            <label for="rsvp-name" data-i18n="rsvp.name">Nama Lengkap</label>
-            <input type="text" id="rsvp-name" name="name" required 
-                   placeholder="Masukkan nama lengkap" data-i18n-placeholder="rsvp.namePlaceholder">
+        <!-- Modern Bento Gallery Grid -->
+        <div class="gallery-bento-grid">
+          <div class="gallery-card card-large gallery-item">
+            <img src="assets/img/gallery/photo1.jpg" alt="Prewedding 1" loading="lazy">
+            <div class="gallery-overlay"><span class="zoom-badge">🔍 Zoom</span></div>
           </div>
-          
-          <div class="form-group">
-            <label data-i18n="rsvp.attendance">Konfirmasi Kehadiran</label>
-            <div class="radio-group">
-              <label class="radio-label">
-                <input type="radio" name="attendance" value="attend" required>
-                <span data-i18n="rsvp.attend">Hadir</span>
-              </label>
-              <label class="radio-label">
-                <input type="radio" name="attendance" value="not-attend">
-                <span data-i18n="rsvp.notAttend">Tidak Hadir</span>
-              </label>
-            </div>
+          <div class="gallery-card card-tall gallery-item">
+            <img src="assets/img/gallery/photo2.jpg" alt="Prewedding 2" loading="lazy">
+            <div class="gallery-overlay"><span class="zoom-badge">🔍 Zoom</span></div>
           </div>
-          
-          <div class="form-group">
-            <label for="rsvp-guests" data-i18n="rsvp.guests">Jumlah Tamu</label>
-            <input type="number" id="rsvp-guests" name="guests" min="1" max="5" 
-                   placeholder="Jumlah tamu yang hadir" data-i18n-placeholder="rsvp.guestsPlaceholder">
+          <div class="gallery-card card-tall gallery-item">
+            <img src="assets/img/gallery/photo3.jpg" alt="Prewedding 3" loading="lazy">
+            <div class="gallery-overlay"><span class="zoom-badge">🔍 Zoom</span></div>
           </div>
-          
-          <div class="form-group">
-            <label for="rsvp-message" data-i18n="rsvp.message">Ucapan & Doa</label>
-            <textarea id="rsvp-message" name="message" rows="4" 
-                      placeholder="Tulis ucapan dan doa untuk kedua mempelai..." 
-                      data-i18n-placeholder="rsvp.messagePlaceholder"></textarea>
+          <div class="gallery-card gallery-item">
+            <img src="assets/img/gallery/photo4.jpg" alt="Prewedding 4" loading="lazy">
+            <div class="gallery-overlay"><span class="zoom-badge">🔍 Zoom</span></div>
           </div>
-          
-          <button type="submit" class="btn btn-primary btn-submit" data-i18n="rsvp.submit">
-            Kirim Konfirmasi
-          </button>
-        </form>
-      </div>
-    </section>
-
-    <section id="guestbook" class="section guestbook-section" aria-labelledby="guestbook-heading">
-      <div class="container">
-        <h2 id="guestbook-heading" class="section-title" data-i18n="guestbook.title">Ucapan & Doa</h2>
-        <div id="guestbook-list" class="guestbook-list" aria-live="polite">
-          <p class="guestbook-loading" data-i18n="guestbook.loading">Memuat ucapan...</p>
+          <div class="gallery-card gallery-item">
+            <img src="assets/img/gallery/photo5.jpg" alt="Prewedding 5" loading="lazy">
+            <div class="gallery-overlay"><span class="zoom-badge">🔍 Zoom</span></div>
+          </div>
+          <div class="gallery-card card-wide gallery-item">
+            <img src="assets/img/gallery/photo6.jpg" alt="Prewedding 6" loading="lazy">
+            <div class="gallery-overlay"><span class="zoom-badge">🔍 Zoom</span></div>
+          </div>
         </div>
+
       </div>
     </section>
 
+    <!-- ================= DIGITAL GIFT SECTION ================= -->
     <section id="envelope" class="section envelope-section" aria-labelledby="envelope-heading">
       <div class="container">
-        <h2 id="envelope-heading" class="section-title" data-i18n="envelope.title">Amplop Digital</h2>
-        <p class="envelope-subtitle" data-i18n="envelope.subtitle">
-          Doa restu Anda merupakan karunia yang sangat berarti bagi kami. Namun jika memberi adalah ungkapan tanda kasih, Anda dapat mengirimkan melalui:
-        </p>
-        <div class="bank-card">
-          <div class="bank-info">
-            <p class="bank-name">Bank Central Asia (BCA)</p>
-            <p class="bank-account">8295123456</p>
-            <p class="bank-holder">Fakari</p>
-          </div>
-          <button id="copy-bank" class="btn btn-copy" data-i18n="envelope.copyBtn">
-            Salin Nomor Rekening
-          </button>
+        
+        <div class="section-header text-center">
+          <span class="section-subtitle">Wedding Gift</span>
+          <h2 id="envelope-heading" class="section-title" data-i18n="envelope.title">Amplop Digital</h2>
+          <div class="section-divider"></div>
+          <p class="section-desc max-w-md mx-auto" data-i18n="envelope.subtitle">
+            Doa restu Anda merupakan karunia yang paling berharga bagi kami. Namun jika memberi adalah ungkapan tanda kasih, Anda dapat menyalurkannya melalui:
+          </p>
         </div>
+
+        <div class="gift-cards-wrap">
+          
+          <!-- Bank Card BCA -->
+          <div class="bank-debit-card glass-panel">
+            <div class="card-chip-row">
+              <div class="card-chip" aria-hidden="true"></div>
+              <span class="bank-logo-text">BCA</span>
+            </div>
+            <div class="card-number-display" id="bank-acc-1">8295 1234 56</div>
+            <div class="card-footer-row">
+              <div class="card-holder-info">
+                <span class="card-holder-label">Account Holder</span>
+                <strong class="card-holder-name">FAKARI</strong>
+              </div>
+              <button class="btn-copy-card copy-btn-action" data-copy="8295123456" aria-label="Copy BCA">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                <span>Salin No. Rekening</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Bank Card Mandiri / Second -->
+          <div class="bank-debit-card glass-panel secondary-card">
+            <div class="card-chip-row">
+              <div class="card-chip" aria-hidden="true"></div>
+              <span class="bank-logo-text">MANDIRI</span>
+            </div>
+            <div class="card-number-display" id="bank-acc-2">1140 0182 9901</div>
+            <div class="card-footer-row">
+              <div class="card-holder-info">
+                <span class="card-holder-label">Account Holder</span>
+                <strong class="card-holder-name">AGHITA</strong>
+              </div>
+              <button class="btn-copy-card copy-btn-action" data-copy="114001829901" aria-label="Copy Mandiri">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                <span>Salin No. Rekening</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+
       </div>
     </section>
+
+    <!-- ================= RSVP & WISHES SECTION ================= -->
+    <section id="rsvp" class="section rsvp-section" aria-labelledby="rsvp-heading">
+      <div class="container">
+        
+        <div class="section-header text-center">
+          <span class="section-subtitle">Warm Wishes</span>
+          <h2 id="rsvp-heading" class="section-title" data-i18n="rsvp.title">Konfirmasi &amp; Ucapan</h2>
+          <div class="section-divider"></div>
+        </div>
+
+        <div class="rsvp-layout-grid">
+          
+          <!-- Form Card -->
+          <div class="rsvp-form-card glass-panel">
+            <h3 class="card-title">Kirim Doa Restu</h3>
+            <form id="rsvp-form" class="modern-form" novalidate>
+              
+              <div class="form-group">
+                <label for="rsvp-name" data-i18n="rsvp.name">Nama Lengkap</label>
+                <input type="text" id="rsvp-name" name="name" required 
+                       placeholder="Masukkan nama Anda" data-i18n-placeholder="rsvp.namePlaceholder">
+              </div>
+              
+              <div class="form-group">
+                <label data-i18n="rsvp.attendance">Konfirmasi Kehadiran</label>
+                <div class="pill-radio-group">
+                  <label class="pill-radio-label">
+                    <input type="radio" name="attendance" value="attend" checked required>
+                    <span class="pill-box">🎉 Hadir</span>
+                  </label>
+                  <label class="pill-radio-label">
+                    <input type="radio" name="attendance" value="not-attend">
+                    <span class="pill-box">🙏 Berhalangan</span>
+                  </label>
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <label for="rsvp-guests" data-i18n="rsvp.guests">Jumlah Tamu</label>
+                <select id="rsvp-guests" name="guests" class="modern-select">
+                  <option value="1">1 Orang</option>
+                  <option value="2">2 Orang</option>
+                  <option value="3">3 Orang</option>
+                  <option value="4">4 Orang</option>
+                </select>
+              </div>
+              
+              <div class="form-group">
+                <label for="rsvp-message" data-i18n="rsvp.message">Ucapan &amp; Doa</label>
+                <textarea id="rsvp-message" name="message" rows="4" required
+                          placeholder="Tuliskan doa restu dan ucapan hangat..." 
+                          data-i18n-placeholder="rsvp.messagePlaceholder"></textarea>
+              </div>
+              
+              <button type="submit" class="btn-submit-modern" data-i18n="rsvp.submit">
+                <span>Kirim Ucapan &amp; RSVP</span>
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              </button>
+            </form>
+          </div>
+
+          <!-- Live Guestbook Feed -->
+          <div class="guestbook-feed-card glass-panel">
+            <div class="feed-header">
+              <h3 class="card-title" data-i18n="guestbook.title">Untaian Doa &amp; Ucapan</h3>
+              <span class="live-pulse-badge">Live Feed</span>
+            </div>
+            <div id="guestbook-list" class="guestbook-scroll-box" aria-live="polite">
+              <p class="guestbook-loading" data-i18n="guestbook.loading">Memuat ucapan...</p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
   </main>
 
+  <!-- ================= FOOTER ================= -->
   <footer class="footer" role="contentinfo">
-    <div class="container">
-      <blockquote class="footer-quote">
-        <p data-i18n="footer.quote">
-          Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu pasangan hidup dari jenismu sendiri, supaya kamu merasa tenteram kepadanya, dan dijadikan-Nya di antaramu rasa kasih dan sayang.
-        </p>
-        <cite data-i18n="footer.source">QS. Ar-Rum: 21</cite>
-      </blockquote>
-      <p class="footer-thanks" data-i18n="footer.thankYou">Terima kasih atas doa dan kehadiran Anda</p>
-      <p class="footer-credit" data-i18n="footer.credit">Made with love for Fakari & Aghita</p>
+    <div class="container text-center">
+      <h3 class="footer-names">Fakari &amp; Aghita</h3>
+      <p class="footer-date">12 . 12 . 2026</p>
+      <p class="footer-thanks" data-i18n="footer.thankYou">Merupakan suatu kehormatan &amp; kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu.</p>
+      <div class="footer-divider"></div>
+      <p class="footer-credit" data-i18n="footer.credit">Made with love for Fakari &amp; Aghita</p>
     </div>
   </footer>
 
+  <!-- Lightbox Modal -->
   <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer" hidden>
     <button class="lightbox-close" aria-label="Close image viewer">&times;</button>
-    <img id="lightbox-img" src="" alt="">
+    <div class="lightbox-content">
+      <img id="lightbox-img" src="" alt="">
+    </div>
   </div>
 
-  <button id="music-toggle" class="music-toggle" aria-label="Toggle music" aria-pressed="false">
-    <svg class="icon-music-on" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
-      <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z" fill="currentColor"/>
-    </svg>
-    <svg class="icon-music-off" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
-      <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z" fill="currentColor"/>
-      <line x1="1" y1="1" x2="23" y2="23" stroke="currentColor" stroke-width="2"/>
-    </svg>
-  </button>
-
+  <!-- Audio Element -->
   <audio id="bg-music" loop preload="auto">
     <source src="assets/music/bg-music.mp3" type="audio/mpeg">
   </audio>
 
+  <!-- Config & JS Engine -->
   <script src="data/config.js"></script>
   <script src="js/main.js"></script>
 </body>
