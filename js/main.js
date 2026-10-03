@@ -28,13 +28,13 @@
     
     document.querySelectorAll('[data-i18n]').forEach(el => {
       const key = el.dataset.i18n;
-      const text = getNestedValue(CONFIG.text[lang], key);
+      const text = getNestedValue(CONFIG?.text?.[lang], key);
       if (text) el.textContent = text;
     });
     
     document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
       const key = el.dataset.i18nPlaceholder;
-      const text = getNestedValue(CONFIG.text[lang], key);
+      const text = getNestedValue(CONFIG?.text?.[lang], key);
       if (text) el.placeholder = text;
     });
 
@@ -169,9 +169,84 @@
 
   sections.forEach(s => scrollSpyObserver.observe(s));
 
+  // ========== Scroll Reveal Observer ==========
+  const revealElements = document.querySelectorAll('.parallax-reveal');
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('revealed');
+      }
+    });
+  }, { threshold: 0.15 });
+
+  revealElements.forEach(el => revealObserver.observe(el));
+
+  // ========== Smooth GPU Parallax Engine ==========
+  if (!prefersReducedMotion) {
+    const parallaxLayers = document.querySelectorAll('.parallax-layer, .parallax-bg, .parallax-elem');
+    const parallaxImages = document.querySelectorAll('.parallax-img');
+    let ticking = false;
+
+    function onScrollParallax() {
+      const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+
+      // 1. Background lights & floating badges
+      parallaxLayers.forEach(el => {
+        const speed = parseFloat(el.dataset.speed) || 0.1;
+        const yOffset = scrollY * speed;
+        el.style.transform = `translate3d(0, ${yOffset.toFixed(2)}px, 0)`;
+      });
+
+      // 2. Parallax Image Window effect
+      parallaxImages.forEach(img => {
+        const parent = img.closest('.couple-frame') || img.closest('.gallery-card');
+        if (!parent) return;
+        const rect = parent.getBoundingClientRect();
+        const viewportHeight = window.innerHeight;
+
+        if (rect.top < viewportHeight && rect.bottom > 0) {
+          const relativePos = (rect.top + rect.height / 2) - (viewportHeight / 2);
+          const shift = relativePos * -0.08;
+          img.style.transform = `translate3d(0, ${shift.toFixed(2)}px, 0) scale(1.05)`;
+        }
+      });
+
+      ticking = false;
+    }
+
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        window.requestAnimationFrame(onScrollParallax);
+        ticking = true;
+      }
+    }, { passive: true });
+
+    onScrollParallax();
+
+    // ========== 3D Interactive Mouse Tilt (Desktop) ==========
+    const tiltCards = document.querySelectorAll('[data-tilt]');
+    tiltCards.forEach(card => {
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const rotateX = ((y - centerY) / centerY) * -6;
+        const rotateY = ((x - centerX) / centerX) * 6;
+
+        card.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-4px)`;
+      });
+
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0)`;
+      });
+    });
+  }
+
   // ========== Countdown Timer ==========
-  const akadDate = (CONFIG && CONFIG.events && CONFIG.events.akad) ? CONFIG.events.akad.date : '2026-12-12';
-  const akadTime = (CONFIG && CONFIG.events && CONFIG.events.akad) ? CONFIG.events.akad.timeStart : '08:00';
+  const akadDate = (CONFIG?.events?.akad) ? CONFIG.events.akad.date : '2026-12-12';
+  const akadTime = (CONFIG?.events?.akad) ? CONFIG.events.akad.timeStart : '08:00';
   const targetDate = new Date(`${akadDate}T${akadTime}:00`).getTime();
 
   function updateCountdown() {
@@ -228,9 +303,9 @@ END:VCALENDAR`;
   }
 
   document.querySelectorAll('.add-calendar').forEach(btn => {
-    btn.addEventListener('click', (e) => {
+    btn.addEventListener('click', () => {
       const event = btn.dataset.event;
-      if (!event || !CONFIG.events[event]) return;
+      if (!event || !CONFIG?.events?.[event]) return;
       const icsContent = generateICS(event);
       const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
       const url = URL.createObjectURL(blob);
@@ -317,7 +392,7 @@ END:VCALENDAR`;
       const safeName = escapeHtml(msg.name || 'Tamu');
       const safeMsg = escapeHtml(msg.message || '');
       const isAttend = msg.attendance === 'attend';
-      const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(safeName)}&background=967646&color=fff&size=68&bold=true`;
+      const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(safeName)}&background=D4AF37&color=000&size=68&bold=true`;
 
       return `
         <div class="guestbook-item">
@@ -369,7 +444,6 @@ END:VCALENDAR`;
       showToast('💌 Terima kasih atas doa restunya!');
       rsvpForm.reset();
 
-      // Submit to Google Apps Script if URL provided
       const rsvpUrl = CONFIG?.googleAppsScript?.rsvpUrl;
       if (rsvpUrl && !rsvpUrl.includes('YOUR_SCRIPT_ID')) {
         try {
